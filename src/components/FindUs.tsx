@@ -30,7 +30,7 @@ export default function FindUs() {
             onMouseLeave={e => (e.currentTarget.style.boxShadow = '0 0 40px rgba(232,240,0,0.15)')}
           >
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1004.0984851827893!2d25.12997169850469!3d35.34129000761349!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzXCsDIwJzI4LjY0Ik4gMjXCsDA3JDU5LjEwIkU!5e0!3m2!1sen!2sus!4v1234567890"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1365.8522090449214!2d25.1290146833682!3d35.34118313167956!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x149a5bf778dd0045%3A0x65dfda2e86166ccc!2sBatch%20%7C%20Specialty%20Coffee%20%26%20Brunch!5e1!3m2!1sel!2sgr!4v1782051641342!5m2!1sel!2sgr"
               width="100%"
               height="400"
               style={{ border: 0, display: 'block' }}
