@@ -66,7 +66,7 @@ export default function HeroSlider() {
 
   return (
     <>
-      {/* Navbar */}
+      {/* Navbar Container */}
       <nav 
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
         style={{
@@ -93,7 +93,7 @@ export default function HeroSlider() {
             />
           </div>
 
-          {/* Universal Hamburger Trigger (PC & Mobile) */}
+          {/* Universal Hamburger Trigger */}
           <button 
             onClick={() => setMenuOpen(!menuOpen)}
             className="text-white hover:text-[#E8F000] transition-colors focus:outline-none z-50 p-2 rounded-full hover:bg-white/5"
@@ -102,46 +102,46 @@ export default function HeroSlider() {
             {menuOpen ? <X size={26} /> : <Menu size={26} />}
           </button>
         </div>
+      </nav>
 
-        {/* Full Screen Overlay Navigation (PC & Mobile) */}
-        <div 
-          className={`fixed inset-0 bg-black/98 backdrop-blur-xl transition-all duration-500 flex flex-col justify-center items-center z-40 ${
-            menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-          }`}
-        >
-          <div className="flex flex-col items-center gap-6 md:gap-8 text-center">
-            {['Home', 'Menu', 'About', 'Contact'].map((item, index) => (
-              <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                onClick={() => setMenuOpen(false)}
-                className="text-2xl md:text-4xl font-bold tracking-wide uppercase text-white/80 no-underline transition-all duration-300 hover:text-[#E8F000] hover:scale-105"
-                style={{
-                  transitionDelay: menuOpen ? `${index * 75}ms` : '0ms',
-                  transform: menuOpen ? 'translateY(0)' : 'translateY(20px)',
-                  opacity: menuOpen ? 1 : 0
-                }}
-              >
-                {item}
-              </a>
-            ))}
-            
+      {/* FULL SCREEN NAVIGATION MENU — Brought outside of the nav bounds for proper layering */}
+      <div 
+        className={`fixed inset-0 bg-black/95 backdrop-blur-2xl transition-all duration-500 flex flex-col justify-center items-center z-40 ${
+          menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        <div className="flex flex-col items-center gap-6 md:gap-8 text-center">
+          {['Home', 'Menu', 'About', 'Contact'].map((item, index) => (
             <a
-              href="https://wolt.com/en/grc/heraklion/restaurant/the-batch"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#E8F000] text-[#0a0a0a] py-3.5 px-8 rounded-full text-sm md:text-base font-black tracking-wider no-underline mt-4 transition-all duration-300 hover:opacity-85 shadow-lg shadow-[#E8F000]/10"
+              key={item}
+              href={`#${item.toLowerCase()}`}
+              onClick={() => setMenuOpen(false)}
+              className="text-2xl md:text-4xl font-bold tracking-wide uppercase text-white/80 no-underline transition-all duration-300 hover:text-[#E8F000] hover:scale-105"
               style={{
-                transitionDelay: menuOpen ? '300ms' : '0ms',
+                transitionDelay: menuOpen ? `${index * 75}ms` : '0ms',
                 transform: menuOpen ? 'translateY(0)' : 'translateY(20px)',
                 opacity: menuOpen ? 1 : 0
               }}
             >
-              Order on Wolt →
+              {item}
             </a>
-          </div>
+          ))}
+          
+          <a
+            href="https://wolt.com/en/grc/heraklion/restaurant/the-batch"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-[#E8F000] text-[#0a0a0a] py-3.5 px-8 rounded-full text-sm md:text-base font-black tracking-wider no-underline mt-4 transition-all duration-300 hover:opacity-85 shadow-lg shadow-[#E8F000]/10"
+            style={{
+              transitionDelay: menuOpen ? '300ms' : '0ms',
+              transform: menuOpen ? 'translateY(0)' : 'translateY(20px)',
+              opacity: menuOpen ? 1 : 0
+            }}
+          >
+            Order on Wolt →
+          </a>
         </div>
-      </nav>
+      </div>
 
       {/* Hero Content Section Layout */}
       <section id="home" style={styles.section}>
@@ -220,7 +220,7 @@ export default function HeroSlider() {
           <span className="text-white/40 text-xs">0{slides.length}</span>
         </div>
 
-        {/* Scroll cues hidden completely on phones for layout optimization */}
+        {/* Scroll cues */}
         <div className="hidden sm:flex absolute right-6 md:right-10 top-1/2 -translate-y-1/2 z-10 flex-col items-center gap-2.5">
           <div style={styles.scrollLine} />
           <span className="text-[9px] tracking-widest text-white/45 uppercase [writing-mode:vertical-lr]">Scroll</span>

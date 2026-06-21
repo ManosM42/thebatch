@@ -1,0 +1,6 @@
+# Allow all search engines to crawl our site
+User-agent: *
+Allow: /
+
+# Tell bots exactly where your sitemap lives
+Sitemap: https://thebatch.gr/sitemap.xml

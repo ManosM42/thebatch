@@ -6,7 +6,6 @@ import Reviews from './components/Reviews';
 import Gallery3D from './components/Gallery3D';
 import FindUs from './components/FindUs';
 import LoadingScreen from './components/LoadingScreen';
-import FlyingCupController from './components/FlyingCupController'; 
 import logoImg from './assets/the-batch-logo.jpg'; 
 
 function App() {
@@ -17,8 +16,10 @@ function App() {
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
       {loading && <LoadingScreen onDone={handleDone} />}
 
+      {/* Main Hero Slider and Navigation Layer */}
       <HeroSlider />
 
+      {/* Restaurant Menu Grid */}
       <Menu />
 
       {/* About Section */}
@@ -27,7 +28,6 @@ function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 items-center">
             <div className="space-y-6">
               
-              {/* Enhanced Flex Wrapper to host the tracking cup anchor */}
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -37,17 +37,6 @@ function App() {
                 <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold" style={{ color: '#E8F000' }}>
                   About Us
                 </h2>
-                
-                {/* 3D ABOUT ANCHOR - Set safely clear of title bounds */}
-                <div 
-                  id="cup-anchor-about" 
-                  style={{ 
-                    width: 'clamp(60px, 10vw, 110px)', 
-                    height: 'clamp(60px, 10vw, 110px)',
-                    pointerEvents: 'none',
-                    userSelect: 'none'
-                  }} 
-                />
               </div>
 
               <p className="text-gray-300 text-base sm:text-lg leading-relaxed">
@@ -61,7 +50,7 @@ function App() {
                 every item on our menu is crafted to perfection.
               </p>
               
-              {/* Responsive feature columns: 1 column on mobile, 3 columns on tablet/desktop */}
+              {/* Responsive feature columns */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4 md:pt-6">
                 {[
                   { icon: Coffee, label: 'Premium Beans' },
@@ -78,7 +67,7 @@ function App() {
               </div>
             </div>
 
-            {/* Adjusted logo container to scale down elegantly on mobile */}
+            {/* Logo container */}
             <div className="relative mt-6 md:mt-0 max-w-md mx-auto w-full">
               <div
                 className="aspect-square rounded-3xl overflow-hidden border transition-all duration-500 sm:hover:rotate-2 sm:hover:scale-105"
@@ -101,16 +90,16 @@ function App() {
         </div>
       </section>
 
+      {/* Responsive Gallery Layout */}
       <Gallery3D />
 
+      {/* Customer Reviews Section */}
       <Reviews />
 
-      {/* Container wrapper ensuring the target coordinate mapper captures 'cup-anchor-findus' seamlessly */}
-      <div id="cup-anchor-findus" style={{ position: 'relative' }}>
-        <FindUs />
-      </div>
+      {/* Maps Wrapper */}
+      <FindUs />
 
-      {/* Fully Mobile Responsive Footer converted to utility Tailwind classes */}
+      {/* Responsive Utilities Footer */}
       <footer className="bg-[#0a0a0a] border-t border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-12 md:py-14">
 
@@ -128,7 +117,7 @@ function App() {
               </p>
             </div>
 
-            {/* Navigation and Visit block */}
+            {/* Navigation and Visit links */}
             <div className="flex gap-12 sm:gap-16 flex-wrap w-full lg:w-auto">
               <div>
                 <p className="text-[10px] tracking-widest uppercase text-[#E8F000] font-bold mb-4 mt-0">Navigate</p>
@@ -154,7 +143,7 @@ function App() {
               </div>
             </div>
 
-            {/* Order Action Button - Touch friendly minimum sizing */}
+            {/* Delivery Links Button */}
             <div className="flex flex-col gap-3.5 items-start w-full sm:w-auto">
               <p className="text-[10px] tracking-widest uppercase text-[#E8F000] font-bold m-0">Order Online</p>
               <a
@@ -175,9 +164,6 @@ function App() {
           </div>
         </div>
       </footer>
-
-      {/* GLOBAL CONTROLLER INJECTION LAYER */}
-      <FlyingCupController />
     </div>
   );
 }
