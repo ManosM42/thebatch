@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Coffee, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import image from '../assets/slider-1.jpg';
 import image2 from '../assets/slider-2.jpg';
 import image3 from '../assets/slider-3.jpg';
@@ -37,7 +37,6 @@ export default function HeroSlider() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Prevent body scrolling when full-screen menu is open
   useEffect(() => {
     if (menuOpen) {
       document.body.style.overflow = 'hidden';
@@ -66,8 +65,8 @@ export default function HeroSlider() {
 
   return (
     <>
-      {/* Navbar Container */}
-      <nav 
+      {/* Navbar */}
+      <nav
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
         style={{
           background: navScrolled && !menuOpen ? 'rgba(10,10,10,0.92)' : 'transparent',
@@ -77,24 +76,22 @@ export default function HeroSlider() {
         }}
       >
         <div className="max-w-7xl mx-auto px-6 sm:px-12 md:px-16 lg:px-24 flex justify-between items-center">
-          {/* Logo Container */}
-          <div className="flex items-center gap-3 z-50">
-            <a href="#home" onClick={() => setMenuOpen(false)} className="flex items-center gap-2.5 no-underline">
-              <Coffee size={22} color="#E8F000" />
-              <span className="text-lg font-extrabold tracking-tight text-white">
-                The Batch<span className="text-[#E8F000]">.</span>
-              </span>
-            </a>
-            
-            {/* 3D CUP ANCHOR LANDMARK */}
-            <div 
-              id="cup-anchor-nav" 
-              className="w-9 h-9 inline-block pointer-events-none select-none" 
-            />
-          </div>
+          {/* Logo — text only */}
+          <a
+            href="#home"
+            onClick={() => setMenuOpen(false)}
+            className="no-underline z-50"
+            style={styles.logoLink}
+          >
+            <span style={styles.logoText}>
+              TH<span style={styles.logoReversedE}>Ǝ</span>
+              {' '}
+              <span style={styles.logoBatch}>BATCH</span>
+            </span>
+          </a>
 
-          {/* Universal Hamburger Trigger */}
-          <button 
+          {/* Hamburger */}
+          <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="text-white hover:text-[#E8F000] transition-colors focus:outline-none z-50 p-2 rounded-full hover:bg-white/5"
             aria-label="Toggle navigation menu"
@@ -104,8 +101,8 @@ export default function HeroSlider() {
         </div>
       </nav>
 
-      {/* FULL SCREEN NAVIGATION MENU — Brought outside of the nav bounds for proper layering */}
-      <div 
+      {/* Full-screen menu */}
+      <div
         className={`fixed inset-0 bg-black/95 backdrop-blur-2xl transition-all duration-500 flex flex-col justify-center items-center z-40 ${
           menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
@@ -120,13 +117,13 @@ export default function HeroSlider() {
               style={{
                 transitionDelay: menuOpen ? `${index * 75}ms` : '0ms',
                 transform: menuOpen ? 'translateY(0)' : 'translateY(20px)',
-                opacity: menuOpen ? 1 : 0
+                opacity: menuOpen ? 1 : 0,
               }}
             >
               {item}
             </a>
           ))}
-          
+
           <a
             href="https://wolt.com/en/grc/heraklion/restaurant/the-batch"
             target="_blank"
@@ -135,7 +132,7 @@ export default function HeroSlider() {
             style={{
               transitionDelay: menuOpen ? '300ms' : '0ms',
               transform: menuOpen ? 'translateY(0)' : 'translateY(20px)',
-              opacity: menuOpen ? 1 : 0
+              opacity: menuOpen ? 1 : 0,
             }}
           >
             Order on Wolt →
@@ -143,7 +140,7 @@ export default function HeroSlider() {
         </div>
       </div>
 
-      {/* Hero Content Section Layout */}
+      {/* Hero Section */}
       <section id="home" style={styles.section}>
         {slides.map((slide, i) => (
           <div
@@ -160,32 +157,31 @@ export default function HeroSlider() {
         <div style={styles.overlay} />
         <div style={{ ...styles.overlay2, opacity: animating ? 1 : 0 }} />
 
-        {/* Content Container */}
         <div className="relative z-10 w-full max-w-4xl px-6 sm:px-12 md:px-16 lg:px-24">
           <div style={{ ...styles.badge, opacity: animating ? 0 : 1, transform: animating ? 'translateY(10px)' : 'translateY(0)', transition: 'all 0.5s 0.1s' }}>
             <span style={styles.dot} />
             Heraklion, Crete
           </div>
 
-          <h1 
+          <h1
             className="font-black leading-[0.95] tracking-tight text-white mb-6"
-            style={{ 
+            style={{
               fontSize: 'clamp(38px, 7vw, 85px)',
-              opacity: animating ? 0 : 1, 
-              transform: animating ? 'translateY(20px)' : 'translateY(0)', 
-              transition: 'all 0.6s 0.2s' 
+              opacity: animating ? 0 : 1,
+              transform: animating ? 'translateY(20px)' : 'translateY(0)',
+              transition: 'all 0.6s 0.2s',
             }}
           >
             {s.headline}<br />
             <span style={styles.yellow}>{s.highlight}</span>
           </h1>
 
-          <p 
+          <p
             className="text-sm sm:text-base md:text-lg text-white/60 leading-relaxed mb-8 max-w-md"
-            style={{ 
-              opacity: animating ? 0 : 1, 
-              transform: animating ? 'translateY(16px)' : 'translateY(0)', 
-              transition: 'all 0.6s 0.3s' 
+            style={{
+              opacity: animating ? 0 : 1,
+              transform: animating ? 'translateY(16px)' : 'translateY(0)',
+              transition: 'all 0.6s 0.3s',
             }}
           >
             {s.sub}
@@ -197,7 +193,6 @@ export default function HeroSlider() {
           </div>
         </div>
 
-        {/* Dynamic Dot Track Indicators */}
         <div className="absolute bottom-10 left-6 sm:left-12 md:left-16 lg:left-24 z-10 flex items-center gap-2">
           {slides.map((_, i) => (
             <button
@@ -213,14 +208,12 @@ export default function HeroSlider() {
           ))}
         </div>
 
-        {/* Counter Overlay Badge */}
         <div className="absolute bottom-9 right-6 sm:right-12 md:right-16 lg:right-24 z-10 flex items-baseline">
           <span className="text-[#E8F000] text-xl sm:text-2xl font-extrabold">0{current + 1}</span>
           <span className="text-white/30 text-xs mx-1.5">/</span>
           <span className="text-white/40 text-xs">0{slides.length}</span>
         </div>
 
-        {/* Scroll cues */}
         <div className="hidden sm:flex absolute right-6 md:right-10 top-1/2 -translate-y-1/2 z-10 flex-col items-center gap-2.5">
           <div style={styles.scrollLine} />
           <span className="text-[9px] tracking-widest text-white/45 uppercase [writing-mode:vertical-lr]">Scroll</span>
@@ -231,6 +224,27 @@ export default function HeroSlider() {
 }
 
 const styles: Record<string, React.CSSProperties> = {
+  logoLink: {
+    display: 'flex',
+    alignItems: 'center',
+    textDecoration: 'none',
+  },
+  logoText: {
+    fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+    fontSize: '18px',
+    fontWeight: 900,
+    letterSpacing: '0.08em',
+    color: '#ffffff',
+    textTransform: 'uppercase',
+    lineHeight: 1,
+  },
+  logoReversedE: {
+    color: '#E8F000',
+    display: 'inline-block',
+  },
+  logoBatch: {
+    color: '#E8F000',
+  },
   section: {
     position: 'relative',
     height: '100vh',
