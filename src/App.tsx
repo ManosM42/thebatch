@@ -6,14 +6,15 @@ import Reviews from './components/Reviews';
 import Gallery3D from './components/Gallery3D';
 import FindUs from './components/FindUs';
 import LoadingScreen from './components/LoadingScreen';
-import FlyingCupController from './components/FlyingCupController'; // Imported Controller
+import FlyingCupController from './components/FlyingCupController'; 
+import logoImg from './assets/the-batch-logo.jpg'; 
 
 function App() {
   const [loading, setLoading] = useState(true);
   const handleDone = useCallback(() => setLoading(false), []);
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white overflow-x-hidden">
       {loading && <LoadingScreen onDone={handleDone} />}
 
       <HeroSlider />
@@ -21,9 +22,9 @@ function App() {
       <Menu />
 
       {/* About Section */}
-      <section id="about" className="py-20 px-6 bg-gradient-to-b from-neutral-900 to-black">
+      <section id="about" className="py-16 md:py-20 px-4 sm:px-6 bg-gradient-to-b from-neutral-900 to-black">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 items-center">
             <div className="space-y-6">
               
               {/* Enhanced Flex Wrapper to host the tracking cup anchor */}
@@ -33,7 +34,7 @@ function App() {
                 gap: 20,
                 flexWrap: 'wrap'
               }}>
-                <h2 className="text-5xl md:text-6xl font-bold" style={{ color: '#E8F000' }}>
+                <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold" style={{ color: '#E8F000' }}>
                   About Us
                 </h2>
                 
@@ -41,34 +42,35 @@ function App() {
                 <div 
                   id="cup-anchor-about" 
                   style={{ 
-                    width: 'clamp(70px, 10vw, 110px)', 
-                    height: 'clamp(70px, 10vw, 110px)',
+                    width: 'clamp(60px, 10vw, 110px)', 
+                    height: 'clamp(60px, 10vw, 110px)',
                     pointerEvents: 'none',
                     userSelect: 'none'
                   }} 
                 />
               </div>
 
-              <p className="text-gray-300 text-lg leading-relaxed">
+              <p className="text-gray-300 text-base sm:text-lg leading-relaxed">
                 At The Batch Spot, we believe coffee is more than just a beverage—it's an experience.
                 Since our founding, we've been dedicated to sourcing the finest beans and crafting each cup
                 with precision and care.
               </p>
-              <p className="text-gray-300 text-lg leading-relaxed">
+              <p className="text-gray-300 text-base sm:text-lg leading-relaxed">
                 Our expert baristas combine traditional techniques with modern innovation to create
                 drinks that delight and inspire. From our signature Freddo Espresso to classic favorites,
                 every item on our menu is crafted to perfection.
               </p>
               
-              <div className="grid grid-cols-3 gap-6 pt-6">
+              {/* Responsive feature columns: 1 column on mobile, 3 columns on tablet/desktop */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4 md:pt-6">
                 {[
                   { icon: Coffee, label: 'Premium Beans' },
                   { icon: Star, label: 'Expert Baristas' },
                   { icon: Clock, label: 'Fresh Daily' },
                 ].map((feature) => (
-                  <div key={feature.label} className="text-center group hover:scale-110 transition-transform duration-300">
-                    <feature.icon className="w-12 h-12 mx-auto mb-2 group-hover:rotate-12 transition-transform duration-300" style={{ color: '#E8F000' }} />
-                    <p className="text-sm text-gray-400 group-hover:transition-colors duration-300">
+                  <div key={feature.label} className="text-center group sm:hover:scale-110 transition-transform duration-300 flex sm:flex-col items-center sm:justify-center gap-4 sm:gap-0 bg-neutral-900/40 sm:bg-transparent p-4 sm:p-0 rounded-2xl">
+                    <feature.icon className="w-10 h-10 sm:w-12 sm:h-12 sm:mx-auto sm:mb-2 group-hover:rotate-12 transition-transform duration-300 flex-shrink-0" style={{ color: '#E8F000' }} />
+                    <p className="text-sm text-gray-300 sm:text-gray-400 group-hover:transition-colors duration-300 font-medium sm:font-normal">
                       {feature.label}
                     </p>
                   </div>
@@ -76,9 +78,10 @@ function App() {
               </div>
             </div>
 
-            <div className="relative">
+            {/* Adjusted logo container to scale down elegantly on mobile */}
+            <div className="relative mt-6 md:mt-0 max-w-md mx-auto w-full">
               <div
-                className="aspect-square rounded-3xl overflow-hidden border transition-all duration-500 hover:rotate-2 hover:scale-105"
+                className="aspect-square rounded-3xl overflow-hidden border transition-all duration-500 sm:hover:rotate-2 sm:hover:scale-105"
                 style={{
                   background: 'linear-gradient(135deg, rgba(232,240,0,0.12) 0%, rgba(232,240,0,0.04) 100%)',
                   borderColor: 'rgba(232,240,0,0.25)',
@@ -86,9 +89,9 @@ function App() {
               >
                 <div className="absolute inset-0 flex items-center justify-center">
                   <img
-                    src="/src/assets/the-batch-logo.jpg"
+                    src={logoImg}
                     alt="The Batch"
-                    className="w-2/3 opacity-20"
+                    className="w-1/2 md:w-2/3 opacity-20"
                     style={{ filter: 'saturate(1.4)' }}
                   />
                 </div>
@@ -107,31 +110,31 @@ function App() {
         <FindUs />
       </div>
 
-      {/* Footer */}
-      <footer style={{ background: '#0a0a0a', borderTop: '1px solid rgba(232,240,0,0.08)' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '56px 48px 40px' }}>
+      {/* Fully Mobile Responsive Footer converted to utility Tailwind classes */}
+      <footer className="bg-[#0a0a0a] border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-6 py-12 md:py-14">
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: 40, marginBottom: 48 }}>
+          <div className="flex flex-col lg:flex-row justify-between items-start gap-10 lg:gap-6 mb-12">
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {/* Brand details */}
+            <div className="flex flex-col gap-4">
               <img
-                src="/src/assets/the-batch-logo.jpg"
+                src={logoImg}
                 alt="The Batch"
-                style={{ width: 130, borderRadius: 8, display: 'block' }}
+                className="w-28 rounded-lg block"
               />
-              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.35)', maxWidth: 220, lineHeight: 1.65, margin: 0 }}>
+              <p className="text-xs md:text-sm text-white/35 max-w-xs leading-relaxed m-0">
                 Specialty coffee crafted with intention — from bean to glass. Heraklion, Crete.
               </p>
             </div>
 
-            <div style={{ display: 'flex', gap: 56, flexWrap: 'wrap' }}>
+            {/* Navigation and Visit block */}
+            <div className="flex gap-12 sm:gap-16 flex-wrap w-full lg:w-auto">
               <div>
-                <p style={{ fontSize: 10, letterSpacing: 2, textTransform: 'uppercase' as const, color: '#E8F000', fontWeight: 700, marginBottom: 16, marginTop: 0 }}>Navigate</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <p className="text-[10px] tracking-widest uppercase text-[#E8F000] font-bold mb-4 mt-0">Navigate</p>
+                <div className="flex flex-col gap-2.5">
                   {[['Home', '#home'], ['Menu', '#menu'], ['About', '#about'], ['Find Us', '#findus'], ['Contact', '#contact']].map(([label, href]) => (
-                    <a key={label} href={href} style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', textDecoration: 'none' }}
-                      onMouseEnter={e => (e.currentTarget.style.color = '#E8F000')}
-                      onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.45)')}>
+                    <a key={label} href={href} className="text-xs md:text-sm text-white/45 no-underline transition-colors duration-200 hover:text-[#E8F000]">
                       {label}
                     </a>
                   ))}
@@ -139,38 +142,36 @@ function App() {
               </div>
 
               <div>
-                <p style={{ fontSize: 10, letterSpacing: 2, textTransform: 'uppercase' as const, color: '#E8F000', fontWeight: 700, marginBottom: 16, marginTop: 0 }}>Visit</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', lineHeight: 1.6 }}>Στυλιανοῦ Γιαμαλάκη 50<br />Ηράκλειο 712 02</span>
-                  <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)' }}>Mon–Sat: 7AM–5PM</span>
-                  <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)' }}>Sun: 7AM–9PM</span>
-                  <a href="tel:+302810223308" style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', textDecoration: 'none' }}
-                    onMouseEnter={e => (e.currentTarget.style.color = '#E8F000')}
-                    onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.45)')}>
+                <p className="text-[10px] tracking-widest uppercase text-[#E8F000] font-bold mb-4 mt-0">Visit</p>
+                <div className="flex flex-col gap-2.5">
+                  <span className="text-xs md:text-sm text-white/45 leading-relaxed">Στυλιανοῦ Γιαμαλάκη 50<br />Ηράκλειο 712 02</span>
+                  <span className="text-xs md:text-sm text-white/45">Mon–Sat: 7AM–5PM</span>
+                  <span className="text-xs md:text-sm text-white/45">Sun: 7AM–9PM</span>
+                  <a href="tel:+302810223308" className="text-xs md:text-sm text-white/45 no-underline transition-colors duration-200 hover:text-[#E8F000]">
                     (+30) 2810 223308
                   </a>
                 </div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'flex-start' }}>
-              <p style={{ fontSize: 10, letterSpacing: 2, textTransform: 'uppercase' as const, color: '#E8F000', fontWeight: 700, margin: 0 }}>Order Online</p>
+            {/* Order Action Button - Touch friendly minimum sizing */}
+            <div className="flex flex-col gap-3.5 items-start w-full sm:w-auto">
+              <p className="text-[10px] tracking-widest uppercase text-[#E8F000] font-bold m-0">Order Online</p>
               <a
                 href="https://wolt.com/en/grc/heraklion/restaurant/the-batch"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ background: '#E8F000', color: '#0a0a0a', padding: '11px 28px', borderRadius: 100, fontSize: 13, fontWeight: 800, textDecoration: 'none', letterSpacing: 0.3 }}
-                onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
-                onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+                className="bg-[#E8F000] text-[#0a0a0a] py-3 px-8 rounded-full text-xs md:text-sm font-extrabold no-underline tracking-wide hover:opacity-85 transition-opacity duration-200 min-h-[44px] flex items-center justify-center"
               >
                 Order on Wolt →
               </a>
             </div>
           </div>
 
-          <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
-            <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.2)', margin: 0 }}>© 2026 The Batch. All rights reserved.</p>
-            <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.2)', margin: 0 }}>Crafted with love and coffee ☕</p>
+          {/* Sub-footer Copyright adjustments */}
+          <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
+            <p className="text-xs text-white/20 m-0">© 2026 The Batch. All rights reserved.</p>
+            <p className="text-xs text-white/20 m-0">Crafted with love and coffee ☕</p>
           </div>
         </div>
       </footer>

@@ -1,446 +1,326 @@
-import { useState, useRef } from 'react';
-import menuBg from '../assets/slider-4.jpg'; // Imported your background asset
+import { useState, useEffect, useCallback } from 'react';
+import { Coffee, Menu, X } from 'lucide-react';
+import image from '../assets/slider-1.jpg';
+import image2 from '../assets/slider-2.jpg';
+import image3 from '../assets/slider-3.jpg';
 
-const Y = '#E8F000';
-
-const menuData = [
+const slides = [
   {
-    section: 'ΚΑΦΕΔΕΣ',
-    label: 'Coffee',
-    emoji: '',
-    note: 'Project AREA 51 Artisan Coffee Roasters — specialty grade, single origin',
-    items: [
-      { name: 'Espresso', price: '€2.60' },
-      { name: 'Espresso Double', price: '€2.90' },
-      { name: 'Espresso Americano', price: '€2.60' },
-      { name: 'Freddo Espresso', price: '€3.00', popular: true },
-      { name: 'Cappuccino', price: '€3.00', popular: true },
-      { name: 'Cappuccino Double', price: '€3.80', popular: true },
-      { name: 'Freddo Cappuccino', price: '€3.00', popular: true },
-      { name: 'Freddo Latte', price: '€3.40' },
-      { name: 'Flat White', price: '€4.00' },
-      { name: 'Latte', price: '€4.00' },
-      { name: 'Cold Brew "The Batch"', price: '€5.00' },
-      { name: 'Ελληνικός', price: '€3.00' },
-      { name: 'Ελληνικός Διπλός', price: '€3.50' },
-    ],
+    image: image,
+    headline: 'Every Cup,',
+    highlight: 'A Story.',
+    sub: 'Specialty coffee crafted with intention — from bean to glass.',
   },
   {
-    section: 'SALTY TREATS',
-    label: 'Salty Treats',
-    emoji: '',
-    note: 'Τα πιο φρέσκα και γευστικά υλικά — αρτοσκευάσματα και snacks',
-    items: [
-      { name: 'Sandwich Γαλοπούλα', price: '€5.00', desc: 'Γαλοπούλα, τυρί, ντομάτα, iceberg, μαγιονέζα lime' },
-      { name: 'Sandwich Fuego', price: '€5.30', desc: 'Χοιρινό fuego, τυρί, ντομάτα, iceberg, μαγιονέζα πάπρικα' },
-      { name: 'Κουλούρι Κοχύλι', price: '€6.60', desc: 'Σολομός, αβοκάντο, κρέμα τυρί', popular: true },
-      { name: 'Κουλούρι Γαλοπούλα', price: '€3.20', desc: 'Γαλοπούλα και τυρί κρέμα' },
-    ],
+    image: image2,
+    headline: 'Bold Flavors,',
+    highlight: 'Pure Craft.',
+    sub: 'Signature freddo espresso and seasonal drinks made fresh daily.',
   },
   {
-    section: 'SWEET TREATS',
-    label: 'Sweet Treats',
-    emoji: '',
-    items: [
-      { name: 'Cookies Chocolate', price: '€4.00' },
-      { name: 'Cookies Peanut Butter', price: '€4.00' },
-      { name: 'Banana Bread', price: '€3.70' },
-    ],
-  },
-  {
-    section: 'BRUNCH',
-    label: 'Brunch',
-    emoji: '',
-    items: [
-      { name: 'Scrambled Eggs', price: '€9.30', desc: 'Προζυμένιο ψωμί, μπέικον, ντομάτα, μανούρι', popular: true },
-      { name: 'Scrambled Eggs Τρούφας', price: '€11.50', desc: 'Προζυμένιο ψωμί, παρμεζάνα, λάδι τρούφας' },
-      { name: 'Croque Madame', price: '€13.00', desc: 'Brioche, μπεσαμέλ, fuego, γκούντα, 2 τηγανητά αυγά, προσούτο', popular: true },
-      { name: 'Κουακερόπιτα', price: '€10.80', desc: 'Μήλο, berries, μέλι και κανέλα' },
-      { name: 'Ομελέτα Λαχανικών', price: '€10.50', desc: 'Κρεμμύδι, πιπεριά, κολοκύθι, ντομάτα — με σαλάτα' },
-      { name: 'Ομελέτα Special', price: '€13.00', desc: 'Κοτόπουλο, μπέικον, ντομάτα — με σαλάτα' },
-      { name: 'Muffin Benedict', price: '€13.50', desc: 'Γιαούρτι μυρωδικών, μπέικον, 2 ποσέ αυγά, σως Ολλανδέζ' },
-      { name: 'Truffle Muffin', price: '€13.50', desc: 'Μαγιονέζα τρούφας, μπέικον, τσένταρ, τηγανητό αυγό — με πατάτες' },
-      { name: 'Αλμυρό Pancake', price: '€14.00', desc: 'Μαγιονέζα, γκούντα, fuego, μπέικον, σως Ολλανδέζ, τηγανητό αυγό' },
-      { name: 'Oreo Pancake', price: '€9.50' },
-      { name: 'Lotus Pancake', price: '€11.50' },
-      { name: 'Λευκή Σοκολάτα Pancake', price: '€9.50' },
-      { name: 'Μέλι Μπανάνα Καρύδι Pancake', price: '€9.50' },
-      { name: 'Φυστίκι & Λευκή Σοκολάτα Pancake', price: '€12.00' },
-      { name: 'French Toast Τσουρέκι', price: '€10.50', desc: 'Φυστικοβούτυρο & κρέμα βανίλια' },
-    ],
-  },
-  {
-    section: 'HEALTHY',
-    label: 'Healthy',
-    emoji: '',
-    items: [
-      { name: 'Yogurt Μέλι και Καρύδι', price: '€7.20', desc: '200gr στραγγιστό γιαούρτι, μέλι, παστέλι, καρύδια, πράσινο μήλο, μαύρη σοκολάτα, κανέλα' },
-      { name: 'Overnight Oats', price: '€7.20', desc: 'Βρώμη, σπόροι τσία, γάλα αμυγδάλου, γιαούρτι, χουρμάς, μέλι' },
-      { name: 'Γιαούρτι Bowl', price: '€7.80', desc: 'Γκρανόλα, φυστικοβούτυρο, φρούτα εποχής', popular: true },
-      { name: 'Protein Ball Red Fruits', price: '€4.00', desc: 'Αμυγδαλοβούτυρο, φιστικοβούτυρο, φουντουκοβούτυρο, πρωτεΐνη, φράουλα μαρμελάδα, σπόροι, βρώμη' },
-      { name: 'Protein Ball Banana', price: '€4.00', desc: 'Αμυγδαλοβούτυρο, λιναρόσπορος, αλεύρι βρώμης, πρωτεΐνη' },
-    ],
-  },
-  {
-    section: 'MAINS',
-    label: 'Mains',
-    emoji: '',
-    items: [
-      { name: 'Caesar με Προσούτο', price: '€9.60', desc: 'Πράσινη σαλάτα, κρουτόν, κοτόπουλο, Caesar sauce, προσούτο' },
-      { name: 'Club Sandwich Chicken', price: '€13.50', desc: 'Μαγιονέζα, Gouda, γαλοπούλα, κοτόπουλο, μπέικον, ντομάτα, iceberg — με πατάτες' },
-      { name: 'Club Sandwich Fuego', price: '€10.80', desc: 'Μαγιονέζα, Gouda, fuego, μπέικον, ντομάτα, iceberg — με πατάτες' },
-      { name: 'Chicken Sando', price: '€14.00', desc: 'Milk bread, sweet chilli mayo, coleslaw, πανέ κοτόπουλο — με πατάτες' },
-      { name: 'Burger', price: '€14.50', desc: 'Potato bun, μοσχαρίσιος κιμάς, τσένταρ, μπέικον, σως — με πατάτες' },
-    ],
-  },
-  {
-    section: 'SMOOTHIES',
-    label: 'Smoothies',
-    emoji: '',
-    note: 'Yum Tales — no added sugar',
-    items: [
-      { name: 'Smoothie Orange', price: '€6.00', desc: 'Πορτοκάλι, mango, μπανάνα, ανανάς, μήλο' },
-      { name: 'Smoothie Banana', price: '€6.00', desc: 'Μπανάνα, ανανάς, μήλο, καρύδα' },
-      { name: 'Smoothie Strawberry', price: '€6.00', desc: 'Φράουλα, raspberry, μπανάνα, μήλο' },
-      { name: 'Smoothie Kiwi', price: '€6.00', desc: 'Ακτινίδιο, σπανάκι, μήλο, αχλάδι, μπανάνα, ανανάς' },
-      { name: 'Smoothie Apple', price: '€6.00', desc: 'Μήλο, μπανάνα, καρότο, παντζάρι' },
-      { name: 'Smoothie Apricot', price: '€6.00', desc: 'Βερύκοκο, μπανάνα, καρότο' },
-    ],
-  },
-  {
-    section: 'DRINKS',
-    label: 'Drinks',
-    emoji: '',
-    items: [
-      { name: 'Σοκολάτα Ζεστή', price: '€4.50' },
-      { name: 'Σοκολάτα Κρύα', price: '€4.50' },
-      { name: 'Matcha Tea', price: '€4.00' },
-      { name: 'Matcha Latte', price: '€4.50' },
-      { name: 'Mochaccino', price: '€5.00' },
-      { name: 'Φυσικός Χυμός Πορτοκάλι', price: '€4.00', popular: true },
-      { name: 'Σπιτική Λεμονάδα', price: '€4.50' },
-      { name: 'Σπιτικό Παγωμένο Τσάι Πράσινο', price: '€4.00' },
-      { name: 'Σπιτικό Παγωμένο Τσάι Κόκκινο', price: '€4.00' },
-      { name: 'Ζεστό Τσάι', price: '€3.00' },
-      { name: 'Coca-Cola 0.33l', price: '€2.50' },
-      { name: 'Coca-Cola Zero 0.33l', price: '€2.50' },
-      { name: 'Νερό 0.5l', price: '€1.00' },
-    ],
-  },
-  {
-    section: 'COCKTAILS',
-    label: 'Cocktails',
-    emoji: '',
-    note: '18+ — 40% vol',
-    items: [
-      { name: 'Mai Tai', price: '€8.00' },
-      { name: 'Flower Spritz', price: '€8.00' },
-      { name: 'Paloma', price: '€8.00' },
-      { name: 'Blossom Spritz', price: '€8.00' },
-      { name: 'Aperol', price: '€8.00' },
-      { name: 'Negroni', price: '€8.00' },
-    ],
-  },
-  {
-    section: 'OFFERS',
-    label: 'Offers',
-    emoji: '',
-    items: [
-      { name: '1 Freddo Espresso + 1 Banana Bread', price: '€5.00', desc: 'Κανονική τιμή €6.70', popular: true },
-    ],
+    image: image3,
+    headline: 'Your Morning',
+    highlight: 'Ritual.',
+    sub: 'Open every day from 7AM — come as you are.',
   },
 ];
 
-type Item = { name: string; price: string; desc?: string; popular?: boolean };
-type Section = { section: string; label: string; emoji: string; note?: string; items: Item[] };
-
-export default function Menu() {
-  const [activeIndex, setActiveIndex] = useState(0);
+export default function HeroSlider() {
+  const [current, setCurrent] = useState(0);
   const [animating, setAnimating] = useState(false);
-  const sliderRef = useRef<HTMLDivElement>(null);
+  const [scrollY, setScrollY] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const dragStart = useRef<number | null>(null);
-  const dragScrollLeft = useRef(0);
-  const isDragging = useRef(false);
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-  const selectSection = (i: number) => {
-    if (i === activeIndex || animating) return;
-    setAnimating(true);
-    setActiveIndex(i);
-    setTimeout(() => {
-      setAnimating(false);
-    }, 420);
-
-    const slider = sliderRef.current;
-    if (slider) {
-      const btn = slider.children[i] as HTMLElement;
-      if (btn) {
-        const offset = btn.offsetLeft - slider.offsetWidth / 2 + btn.offsetWidth / 2;
-        slider.scrollTo({ left: offset, behavior: 'smooth' });
-      }
+  // Prevent body scrolling when full-screen menu is open
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
     }
-  };
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
 
-  const onMouseDown = (e: React.MouseEvent) => {
-    isDragging.current = false;
-    dragStart.current = e.pageX - (sliderRef.current?.offsetLeft ?? 0);
-    dragScrollLeft.current = sliderRef.current?.scrollLeft ?? 0;
-    sliderRef.current!.style.cursor = 'grabbing';
-  };
-  const onMouseMove = (e: React.MouseEvent) => {
-    if (dragStart.current === null) return;
-    const x = e.pageX - (sliderRef.current?.offsetLeft ?? 0);
-    const walk = x - dragStart.current;
-    if (Math.abs(walk) > 4) isDragging.current = true;
-    if (sliderRef.current) sliderRef.current.scrollLeft = dragScrollLeft.current - walk;
-  };
-  const onMouseUp = () => {
-    dragStart.current = null;
-    if (sliderRef.current) sliderRef.current.style.cursor = 'grab';
-  };
+  const go = useCallback((next: number) => {
+    if (animating) return;
+    setAnimating(true);
+    setTimeout(() => {
+      setCurrent(next);
+      setAnimating(false);
+    }, 600);
+  }, [animating]);
 
-  const sec = menuData[activeIndex] as Section;
+  useEffect(() => {
+    const t = setInterval(() => go((current + 1) % slides.length), 5500);
+    return () => clearInterval(t);
+  }, [current, go]);
+
+  const s = slides[current];
+  const navScrolled = scrollY > 60;
 
   return (
-    <section 
-      id="menu" 
-      style={{ 
-        backgroundImage: `linear-gradient(to bottom, rgba(13, 13, 13, 0.45), rgba(13, 13, 13, 0.55)), url(${menuBg})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed', 
-        padding: '96px 0 80px' 
-      }}
-    >
-      <style>{`
-        .menu-tab-bar::-webkit-scrollbar { display: none; }
-        .menu-tab-bar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        @keyframes itemSlideIn {
-          from { opacity: 0; transform: translateY(14px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes sectionFadeIn {
-          from { opacity: 0; transform: translateY(8px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
-
-      <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 24px' }}>
-
-        {/* Header Container Wrapper */}
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          gap: 20, 
-          marginBottom: 52,
-          flexWrap: 'wrap' // Wraps cleanly below text elements on extreme portrait screens
-        }}>
-          <div style={{ textAlign: 'center' }}>
-            <span style={{ display: 'inline-block', fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', color: Y, fontWeight: 700, marginBottom: 12 }}>
-              What we serve
-            </span>
-            <h2 style={{ fontSize: 'clamp(38px, 6vw, 60px)', fontWeight: 900, color: '#fff', letterSpacing: -2, margin: '0 0 10px', lineHeight: 1, textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
-              Our Menu
-            </h2>
-            <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.85)', margin: 0, textShadow: '0 1px 5px rgba(0,0,0,0.5)' }}>
-              Crafted fresh, served with intention
-            </p>
-          </div>
-
-          {/* 3D CUP ANCHOR LANDMARK (Swerve Position Station) */}
-          {/* Sized explicitly via clamp to preserve mobile responsive margins safely */}
-          <div 
-            id="cup-anchor-menu" 
-            style={{ 
-              width: 'clamp(75px, 12vw, 120px)', 
-              height: 'clamp(75px, 12vw, 120px)',
-              pointerEvents: 'none',
-              userSelect: 'none'
-            }} 
-          />
-        </div>
-
-        {/* Scrollable tab bar */}
-        <div style={{ position: 'relative', marginBottom: 32 }}>
-          <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 40, background: 'linear-gradient(to right, rgba(13,13,13,0.4), transparent)', zIndex: 2, pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 40, background: 'linear-gradient(to left, rgba(13,13,13,0.4), transparent)', zIndex: 2, pointerEvents: 'none' }} />
-
-          <div
-            ref={sliderRef}
-            className="menu-tab-bar"
-            onMouseDown={onMouseDown}
-            onMouseMove={onMouseMove}
-            onMouseUp={onMouseUp}
-            onMouseLeave={onMouseUp}
-            style={{
-              display: 'flex',
-              gap: 8,
-              overflowX: 'auto',
-              padding: '4px 40px 12px',
-              cursor: 'grab',
-              userSelect: 'none',
-            }}
-          >
-            {menuData.map((s, i) => {
-              const isActive = i === activeIndex;
-              return (
-                <button
-                  key={s.section}
-                  onClick={() => { if (!isDragging.current) selectSection(i); }}
-                  style={{
-                    flexShrink: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 7,
-                    padding: '9px 18px',
-                    borderRadius: 100,
-                    border: `1px solid ${isActive ? Y : 'rgba(255,255,255,0.25)'}`,
-                    background: isActive ? Y : 'rgba(0,0,0,0.6)',
-                    color: isActive ? '#0a0a0a' : 'rgba(255,255,255,0.9)',
-                    fontSize: 13,
-                    fontWeight: isActive ? 800 : 500,
-                    cursor: 'pointer',
-                    transition: 'all 0.25s',
-                    whiteSpace: 'nowrap',
-                    backdropFilter: 'blur(6px)',
-                  }}
-                >
-                  <span style={{ fontSize: 15 }}>{s.emoji}</span>
-                  {s.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Active section panel */}
-        <div
-          key={activeIndex}
-          style={{
-            borderRadius: 20,
-            border: '1px solid rgba(232,240,0,0.3)',
-            background: 'rgba(10,10,10,0.75)', 
-            backdropFilter: 'blur(12px)', 
-            overflow: 'hidden',
-            animation: 'sectionFadeIn 0.35s ease both',
-          }}
-        >
-          {/* Section header */}
-          <div style={{
-            padding: '24px 28px 20px',
-            borderBottom: '1px solid rgba(255,255,255,0.12)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 14,
-          }}>
-            <span style={{ fontSize: 28 }}>{sec.emoji}</span>
-            <div>
-              <h3 style={{ fontSize: 20, fontWeight: 800, color: '#fff', margin: 0, letterSpacing: -0.4 }}>
-                {sec.label}
-              </h3>
-              <span style={{ fontSize: 10, letterSpacing: 2, textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>
-                {sec.section} · {sec.items.length} items
+    <>
+      {/* Navbar */}
+      <nav 
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+        style={{
+          background: navScrolled && !menuOpen ? 'rgba(10,10,10,0.92)' : 'transparent',
+          backdropFilter: navScrolled && !menuOpen ? 'blur(12px)' : 'none',
+          boxShadow: navScrolled && !menuOpen ? '0 1px 0 rgba(232,240,0,0.08)' : 'none',
+          padding: navScrolled ? '12px 0' : '24px 0',
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-6 sm:px-12 md:px-16 lg:px-24 flex justify-between items-center">
+          {/* Logo Container */}
+          <div className="flex items-center gap-3 z-50">
+            <a href="#home" onClick={() => setMenuOpen(false)} className="flex items-center gap-2.5 no-underline">
+              <Coffee size={22} color="#E8F000" />
+              <span className="text-lg font-extrabold tracking-tight text-white">
+                The Batch<span className="text-[#E8F000]">.</span>
               </span>
-            </div>
+            </a>
+            
+            {/* 3D CUP ANCHOR LANDMARK */}
+            <div 
+              id="cup-anchor-nav" 
+              className="w-9 h-9 inline-block pointer-events-none select-none" 
+            />
           </div>
 
-          {/* Note */}
-          {sec.note && (
-            <div style={{ padding: '14px 28px 14px', borderLeft: `3px solid ${Y}`, margin: '16px 28px 0', background: 'rgba(232,240,0,0.08)', borderRadius: 6 }}>
-              <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', margin: 0, lineHeight: 1.6 }}>{sec.note}</p>
-            </div>
-          )}
+          {/* Universal Hamburger Trigger (PC & Mobile) */}
+          <button 
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="text-white hover:text-[#E8F000] transition-colors focus:outline-none z-50 p-2 rounded-full hover:bg-white/5"
+            aria-label="Toggle navigation menu"
+          >
+            {menuOpen ? <X size={26} /> : <Menu size={26} />}
+          </button>
+        </div>
 
-          {/* Items */}
-          <div style={{ padding: '8px 0 8px' }}>
-            {sec.items.map((item: Item, j: number) => (
-              <div
-                key={item.name}
+        {/* Full Screen Overlay Navigation (PC & Mobile) */}
+        <div 
+          className={`fixed inset-0 bg-black/98 backdrop-blur-xl transition-all duration-500 flex flex-col justify-center items-center z-40 ${
+            menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          }`}
+        >
+          <div className="flex flex-col items-center gap-6 md:gap-8 text-center">
+            {['Home', 'Menu', 'About', 'Contact'].map((item, index) => (
+              <a
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                onClick={() => setMenuOpen(false)}
+                className="text-2xl md:text-4xl font-bold tracking-wide uppercase text-white/80 no-underline transition-all duration-300 hover:text-[#E8F000] hover:scale-105"
                 style={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  justifyContent: 'space-between',
-                  gap: 16,
-                  padding: '14px 28px',
-                  borderBottom: j < sec.items.length - 1 ? '1px solid rgba(255,255,255,0.08)' : 'none',
-                  animation: `itemSlideIn 0.4s ease both`,
-                  animationDelay: `${j * 35}ms`,
+                  transitionDelay: menuOpen ? `${index * 75}ms` : '0ms',
+                  transform: menuOpen ? 'translateY(0)' : 'translateY(20px)',
+                  opacity: menuOpen ? 1 : 0
                 }}
               >
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: 14, fontWeight: 600, color: '#fff', letterSpacing: -0.1 }}>
-                      {item.name}
-                    </span>
-                    {item.popular && (
-                      <span style={{
-                        fontSize: 9, fontWeight: 800, letterSpacing: 1,
-                        textTransform: 'uppercase', color: '#0a0a0a',
-                        background: Y, padding: '2px 8px', borderRadius: 100,
-                      }}>
-                        Popular
-                      </span>
-                    )}
-                  </div>
-                  {item.desc && (
-                    <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', margin: '4px 0 0', lineHeight: 1.55 }}>
-                      {item.desc}
-                    </p>
-                  )}
-                </div>
-                <span style={{ fontSize: 14, fontWeight: 800, color: Y, whiteSpace: 'nowrap', flexShrink: 0, paddingTop: 1 }}>
-                  {item.price}
-                </span>
-              </div>
+                {item}
+              </a>
             ))}
+            
+            <a
+              href="https://wolt.com/en/grc/heraklion/restaurant/the-batch"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#E8F000] text-[#0a0a0a] py-3.5 px-8 rounded-full text-sm md:text-base font-black tracking-wider no-underline mt-4 transition-all duration-300 hover:opacity-85 shadow-lg shadow-[#E8F000]/10"
+              style={{
+                transitionDelay: menuOpen ? '300ms' : '0ms',
+                transform: menuOpen ? 'translateY(0)' : 'translateY(20px)',
+                opacity: menuOpen ? 1 : 0
+              }}
+            >
+              Order on Wolt →
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Content Section Layout */}
+      <section id="home" style={styles.section}>
+        {slides.map((slide, i) => (
+          <div
+            key={i}
+            style={{
+              ...styles.bg,
+              backgroundImage: `url(${slide.image})`,
+              opacity: i === current ? 1 : 0,
+              transition: 'opacity 0.9s cubic-bezier(0.4,0,0.2,1)',
+              zIndex: i === current ? 0 : -1,
+            }}
+          />
+        ))}
+        <div style={styles.overlay} />
+        <div style={{ ...styles.overlay2, opacity: animating ? 1 : 0 }} />
+
+        {/* Content Container */}
+        <div className="relative z-10 w-full max-w-4xl px-6 sm:px-12 md:px-16 lg:px-24">
+          <div style={{ ...styles.badge, opacity: animating ? 0 : 1, transform: animating ? 'translateY(10px)' : 'translateY(0)', transition: 'all 0.5s 0.1s' }}>
+            <span style={styles.dot} />
+            Heraklion, Crete
+          </div>
+
+          <h1 
+            className="font-black leading-[0.95] tracking-tight text-white mb-6"
+            style={{ 
+              fontSize: 'clamp(38px, 7vw, 85px)',
+              opacity: animating ? 0 : 1, 
+              transform: animating ? 'translateY(20px)' : 'translateY(0)', 
+              transition: 'all 0.6s 0.2s' 
+            }}
+          >
+            {s.headline}<br />
+            <span style={styles.yellow}>{s.highlight}</span>
+          </h1>
+
+          <p 
+            className="text-sm sm:text-base md:text-lg text-white/60 leading-relaxed mb-8 max-w-md"
+            style={{ 
+              opacity: animating ? 0 : 1, 
+              transform: animating ? 'translateY(16px)' : 'translateY(0)', 
+              transition: 'all 0.6s 0.3s' 
+            }}
+          >
+            {s.sub}
+          </p>
+
+          <div style={{ ...styles.btns, opacity: animating ? 0 : 1, transition: 'opacity 0.5s 0.4s' }}>
+            <a href="#menu" style={styles.btnPrimary} className="min-h-[44px] flex items-center justify-center">View Menu</a>
+            <a href="#findus" style={styles.btnGhost} className="min-h-[44px] flex items-center justify-center">Find Us</a>
           </div>
         </div>
 
-        {/* Dot indicators */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginTop: 24 }}>
-          {menuData.map((_, i) => (
+        {/* Dynamic Dot Track Indicators */}
+        <div className="absolute bottom-10 left-6 sm:left-12 md:left-16 lg:left-24 z-10 flex items-center gap-2">
+          {slides.map((_, i) => (
             <button
               key={i}
-              onClick={() => selectSection(i)}
+              onClick={() => go(i)}
               style={{
-                width: i === activeIndex ? 24 : 6,
-                height: 6,
-                borderRadius: 3,
-                border: 'none',
-                background: i === activeIndex ? Y : 'rgba(255,255,255,0.4)',
-                cursor: 'pointer',
-                padding: 0,
-                transition: 'all 0.3s cubic-bezier(0.4,0,0.2,1)',
+                ...styles.dotBtn,
+                width: i === current ? 32 : 8,
+                background: i === current ? '#E8F000' : 'rgba(255,255,255,0.35)',
               }}
+              aria-label={`Slide ${i + 1}`}
             />
           ))}
         </div>
 
-        {/* Wolt CTA */}
-        <div style={{ textShadow: 'none', textAlign: 'center', marginTop: 48 }}>
-          <a
-            href="https://wolt.com/en/grc/heraklion/restaurant/the-batch"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'inline-block',
-              background: Y,
-              color: '#0a0a0a',
-              padding: '15px 44px',
-              borderRadius: 100,
-              fontSize: 13,
-              fontWeight: 800,
-              letterSpacing: 0.5,
-              textDecoration: 'none',
-              boxShadow: '0 4px 20px rgba(232,240,0,0.3)'
-            }}
-          >
-            Order on Wolt →
-          </a>
+        {/* Counter Overlay Badge */}
+        <div className="absolute bottom-9 right-6 sm:right-12 md:right-16 lg:right-24 z-10 flex items-baseline">
+          <span className="text-[#E8F000] text-xl sm:text-2xl font-extrabold">0{current + 1}</span>
+          <span className="text-white/30 text-xs mx-1.5">/</span>
+          <span className="text-white/40 text-xs">0{slides.length}</span>
         </div>
-      </div>
-    </section>
+
+        {/* Scroll cues hidden completely on phones for layout optimization */}
+        <div className="hidden sm:flex absolute right-6 md:right-10 top-1/2 -translate-y-1/2 z-10 flex-col items-center gap-2.5">
+          <div style={styles.scrollLine} />
+          <span className="text-[9px] tracking-widest text-white/45 uppercase [writing-mode:vertical-lr]">Scroll</span>
+        </div>
+      </section>
+    </>
   );
 }
+
+const styles: Record<string, React.CSSProperties> = {
+  section: {
+    position: 'relative',
+    height: '100vh',
+    minHeight: 600,
+    overflow: 'hidden',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  bg: {
+    position: 'absolute',
+    inset: 0,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    transform: 'scale(1.02)',
+  },
+  overlay: {
+    position: 'absolute',
+    inset: 0,
+    background: 'linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0.3) 100%)',
+    zIndex: 1,
+  },
+  overlay2: {
+    position: 'absolute',
+    inset: 0,
+    background: '#000',
+    zIndex: 2,
+    pointerEvents: 'none',
+    transition: 'opacity 0.3s',
+  },
+  badge: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 8,
+    background: 'rgba(232,240,0,0.12)',
+    border: '0.5px solid rgba(232,240,0,0.4)',
+    borderRadius: 100,
+    padding: '5px 14px',
+    fontSize: 10,
+    fontWeight: 600,
+    color: '#E8F000',
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
+    marginBottom: 20,
+  },
+  dot: {
+    width: 5,
+    height: 5,
+    borderRadius: '50%',
+    background: '#E8F000',
+    display: 'inline-block',
+  },
+  yellow: {
+    color: '#E8F000',
+  },
+  btns: {
+    display: 'flex',
+    gap: 12,
+    flexWrap: 'wrap',
+  },
+  btnPrimary: {
+    background: '#E8F000',
+    color: '#0a0a0a',
+    padding: '12px 28px',
+    borderRadius: 100,
+    fontSize: 13,
+    fontWeight: 700,
+    textDecoration: 'none',
+    letterSpacing: 0.3,
+  },
+  btnGhost: {
+    background: 'transparent',
+    color: '#fff',
+    padding: '11px 28px',
+    borderRadius: 100,
+    fontSize: 13,
+    fontWeight: 600,
+    textDecoration: 'none',
+    border: '0.5px solid rgba(255,255,255,0.3)',
+  },
+  dotBtn: {
+    height: 6,
+    borderRadius: 3,
+    border: 'none',
+    cursor: 'pointer',
+    padding: 0,
+    transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)',
+  },
+  scrollLine: {
+    width: 1,
+    height: 45,
+    background: 'linear-gradient(to bottom, #E8F000, transparent)',
+  },
+};
